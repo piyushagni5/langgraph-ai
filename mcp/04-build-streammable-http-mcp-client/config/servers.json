@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "temperature_converter": {
+      "type": "http",
+      "url": "http://localhost:8000/mcp/",
+      "description": "Temperature conversion utilities supporting Celsius, Fahrenheit, and Kelvin"
+    },
+    "terminal": {
+      "type": "stdio", 
+      "command": "python",
+      "args": [
+        "servers/stdio/terminal_server.py"
+      ],
+      "description": "Local terminal command execution for file operations"
+    }
+  }
+}

@@ -1,2 +1,2 @@
-100°F = 37.78°C
-100°F = 310.93K
+100°F is equal to 37.78°C, using the formula: °C = (°F - 32) × 5/9
+100°F is equal to 310.93K, using the formula: K = (°F - 32) × 5/9 + 273.15

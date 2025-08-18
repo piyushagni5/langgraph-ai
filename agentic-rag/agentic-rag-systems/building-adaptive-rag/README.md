@@ -9,7 +9,7 @@ Adaptive RAG represents the most sophisticated evolution, addressing a fundament
 
 ![alt text](image.png)
 
-This repository contains a refactored version of the [original LangChain's Cookbook](https://github.com/mistralai/cookbook/tree/main/third_party/langchain).
+This comprehensive guide presents a refactored approach to the original [LangChain implementations](https://github.com/mistralai/cookbook/tree/main/third_party/langchain), prioritizing enhanced code readability, improved maintainability, and superior developer experience. The implementation is inspired by Marco’s [GitHub repository](https://github.com/emarco177/langgraph-course/tree/project/agentic-rag), which itself references work from mistralai’s [GitHub repository](https://github.com/mistralai/cookbook/tree/main/third_party/langchain). 
 
 
 ## Project Structure
@@ -146,4 +146,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - Original LangChain repository: [LangChain Cookbook](https://github.com/mistralai/cookbook/tree/main/third_party/langchain)
 - By Sophia Young from Mistral & Lance Martin from LangChain
 - Built with LangGraph 🦜🕸️
+- Marco's refactored repository
 

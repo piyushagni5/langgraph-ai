@@ -16,36 +16,37 @@ This comprehensive guide presents a refactored approach to the original [LangCha
 
 ```
 building-adaptive-rag/
-├── graph/
-│   ├── chains/
-│   │   ├── tests/
-│   │   │   ├── __init__.py
-│   │   │   └── test_chains.py
-│   │   ├── __init__.py
-│   │   ├── answer_grader.py
-│   │   ├── generation.py
-│   │   ├── hallucination_grader.py
-│   │   ├── retrieval_grader.py
-│   │   └── router.py
-│   ├── nodes/
-│   │   ├── __init__.py
-│   │   ├── generate.py
-│   │   ├── grade_documents.py
-│   │   ├── retrieve.py
-│   │   └── web_search.py
-│   ├── __init__.py
-│   ├── consts.py
-│   ├── graph.py
-│   └── state.py
-├── static/
+├── src/                    # Source code
+│   ├── workflow/          # Core workflow logic
+│   │   ├── chains/       # LLM processing chains
+│   │   │   ├── answer_grader.py
+│   │   │   ├── generation.py
+│   │   │   ├── hallucination_grader.py
+│   │   │   ├── retrieval_grader.py
+│   │   │   └── router.py
+│   │   ├── nodes/        # Workflow nodes
+│   │   │   ├── generate.py
+│   │   │   ├── grade_documents.py
+│   │   │   ├── retrieve.py
+│   │   │   └── web_search.py
+│   │   ├── consts.py     # Node constants
+│   │   ├── graph.py      # Main workflow orchestration
+│   │   └── state.py      # State management
+│   ├── cli/              # Command line interface
+│   │   └── main.py       # Interactive CLI
+│   └── models/           # Model configurations
+│       └── model.py      # LLM and embedding models
+├── data/                 # Data processing
+│   └── ingestion.py      # Document ingestion and vector store
+├── assets/               # Static files and images
 │   ├── LangChain-logo.png
-│   ├── Langgraph Adaptive Rag.png
-│   └── graph.png
-├── .env
+│   └── Langgraph Adaptive Rag.png
+├── tests/                # Test files
+│   ├── __init__.py
+│   └── test_chains.py    # Chain testing suite
+├── .env                  # Environment variables
 ├── .gitignore
-├── ingestion.py
-├── main.py
-├── model.py
+├── main.py              # Application entry point
 ├── README.md
 └── requirements.txt
 ```
@@ -104,18 +105,34 @@ LANGCHAIN_PROJECT=agentic-rag                  # Optional
 
 ## Usage
 
-### Start the Agentic RAG flow
+### Start the Adaptive RAG System
+
+```bash
+python main.py
+```
+
+Or with uv:
 
 ```bash
 uv run main.py
 ```
 
+The system will start an interactive CLI where you can ask questions and receive intelligent responses that combine local knowledge base retrieval with web search when necessary.
+
 ### Running Tests
 
-To run tests, execute the following command:
+To run the test suite (make sure your virtual environment is activated):
 
 ```bash
-uv run pytest . -s -v
+# If using virtual environment
+source .venv/bin/activate
+python -m pytest tests/ -v
+```
+
+Or with uv:
+
+```bash
+uv run pytest tests/ -v
 ```
 
 ## Features
@@ -126,16 +143,46 @@ uv run pytest . -s -v
 - **Web Search Integration**: Fallback to web search when local knowledge is insufficient
 - **Document Grading**: Evaluates relevance of retrieved documents
 - **Hallucination Detection**: Identifies and handles potential hallucinations in generated responses
+- **Professional Architecture**: Clean, modular codebase with industry-standard folder structure
+- **Interactive CLI**: User-friendly command-line interface for easy interaction
+- **Comprehensive Testing**: Full test suite for reliability and maintainability
 
 ## Architecture
 
-The system implements a sophisticated RAG pipeline with the following components:
+The system implements a sophisticated RAG pipeline with a professional, modular architecture:
 
-- **Router**: Intelligently routes queries between vectorstore retrieval and web search
-- **Retrieval Grader**: Evaluates the relevance of retrieved documents
-- **Generation Chain**: Produces answers based on retrieved context
-- **Hallucination Grader**: Detects potential hallucinations in generated responses
-- **Answer Grader**: Evaluates the quality and relevance of final answers
+### Core Components
+
+- **Router** (`src/workflow/chains/router.py`): Intelligently routes queries between vectorstore retrieval and web search
+- **Retrieval Grader** (`src/workflow/chains/retrieval_grader.py`): Evaluates the relevance of retrieved documents
+- **Generation Chain** (`src/workflow/chains/generation.py`): Produces answers based on retrieved context
+- **Hallucination Grader** (`src/workflow/chains/hallucination_grader.py`): Detects potential hallucinations in generated responses
+- **Answer Grader** (`src/workflow/chains/answer_grader.py`): Evaluates the quality and relevance of final answers
+
+### Workflow Nodes
+
+- **Retrieve** (`src/workflow/nodes/retrieve.py`): Retrieves documents from the vector store
+- **Grade Documents** (`src/workflow/nodes/grade_documents.py`): Filters documents by relevance
+- **Generate** (`src/workflow/nodes/generate.py`): Generates natural language answers
+- **Web Search** (`src/workflow/nodes/web_search.py`): Performs web search for additional information
+
+### Data Management
+
+- **Ingestion** (`data/ingestion.py`): Handles document loading, processing, and vector store creation
+- **Models** (`src/models/model.py`): Centralized LLM and embedding model configuration
+
+## Workflow
+
+The adaptive RAG system follows this intelligent workflow:
+
+1. **Query Analysis**: User question is analyzed by the router
+2. **Initial Routing**: Directs to either vector store retrieval or web search
+3. **Document Retrieval**: Retrieves relevant documents from the knowledge base
+4. **Relevance Grading**: Evaluates and filters documents for relevance
+5. **Answer Generation**: Creates responses using filtered context
+6. **Quality Assessment**: Checks for hallucinations and answer adequacy
+7. **Adaptive Response**: Routes to web search if quality is insufficient
+8. **Final Output**: Delivers high-quality, grounded responses
 
 ## Contributing
 
@@ -145,6 +192,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 - Original LangChain repository: [LangChain Cookbook](https://github.com/mistralai/cookbook/tree/main/third_party/langchain)
 - By Sophia Young from Mistral & Lance Martin from LangChain
-- Built with LangGraph 🦜🕸️
-- Marco's refactored repository
-
+- Built with LangGraph
+- Marco's refactored [repository](https://github.com/emarco177/langgraph-course/tree/project/agentic-rag)

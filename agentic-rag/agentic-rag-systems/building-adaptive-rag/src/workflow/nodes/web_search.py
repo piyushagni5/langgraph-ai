@@ -2,7 +2,7 @@ from typing import Any, Dict
 from dotenv import load_dotenv
 from langchain.schema import Document
 from langchain_tavily import TavilySearch
-from graph.state import GraphState
+from src.workflow.state import GraphState
 
 load_dotenv()
 
@@ -28,6 +28,3 @@ def web_search(state: GraphState) -> Dict[str, Any]:
         documents = [web_results]
     
     return {"documents": documents, "question": question}
-
-if __name__ == "__main__":
-    web_search(state={"question": "agent memory", "documents": None})

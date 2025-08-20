@@ -1,8 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableSequence
 from pydantic import BaseModel, Field
-from model import llm_model
-
+from src.models.model import llm_model
 
 class GradeAnswer(BaseModel):
 
@@ -11,7 +10,6 @@ class GradeAnswer(BaseModel):
     )
 
 llm =  llm_model
-
 structured_llm_grader = llm.with_structured_output(GradeAnswer)
 
 system = """You are a grader assessing whether an answer addresses / resolves a question \n 

@@ -71,4 +71,5 @@ workflow.add_edge(WEBSEARCH, GENERATE)
 
 app = workflow.compile()
 
+# Export graph visualization
 app.get_graph().draw_mermaid_png(output_file_path="graph.png")

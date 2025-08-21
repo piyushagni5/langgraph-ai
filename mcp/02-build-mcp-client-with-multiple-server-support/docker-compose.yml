@@ -1,0 +1,36 @@
+services:
+  terminal_server:
+    build:
+      context: ./servers/terminal_server
+      dockerfile: Dockerfile
+    image: terminal_server_docker
+    container_name: mcp_terminal_server
+    stdin_open: true
+    tty: true
+    environment:
+      - DOCKER_CONTAINER=true
+    volumes:
+      - ./workspace:/workspace
+    networks:
+      - mcp_network
+    restart: unless-stopped
+
+  fetch_server:
+    build:
+      context: ./servers/fetch_server
+      dockerfile: Dockerfile
+    image: mcp_fetch_server_test
+    container_name: mcp_fetch_server
+    stdin_open: true
+    tty: true
+    networks:
+      - mcp_network
+    restart: unless-stopped
+
+networks:
+  mcp_network:
+    driver: bridge
+
+volumes:
+  workspace_data:
+    driver: local

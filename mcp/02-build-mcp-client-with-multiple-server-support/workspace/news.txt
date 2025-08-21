@@ -1,0 +1,5 @@
+Top 3 Hacker News Stories:
+
+1. Beyond sensor data: Foundation models of behavioral data from wearables (arxiv.org)
+2. Weaponizing image scaling against production AI systems (trailofbits.com)
+3. Unmasking the Privacy Risks of Apple Intelligence (lumia.security)

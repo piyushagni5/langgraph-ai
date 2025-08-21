@@ -1,27 +1,22 @@
-# Use the official Python 3.11-slim image as the base image
+# Terminal Server Docker Configuration
+# Containerized MCP terminal server for secure command execution
+
 FROM python:3.11-slim
-# This provides a lightweight, modern Python environment that meets our minimum requirements (Python 3.10+)
 
-# Set the working directory inside the container to /app
+# Set application working directory
 WORKDIR /app
-# All subsequent commands will execute within this directory
 
-# Create the workspace directory for command execution
+# Create workspace directory for command execution isolation
 RUN mkdir -p /workspace
 
-# Copy all files from the current directory (terminal_server code) into /app in the container
+# Copy server implementation
 COPY . /app
-# This transfers your complete server implementation to the container
 
-# Install required Python packages from requirements.txt
+# Install Python dependencies without cache to minimize image size
 RUN pip install --no-cache-dir -r requirements.txt
-# The --no-cache-dir flag reduces image size by preventing pip from caching installation files
-# Ensure your requirements.txt includes all dependencies required by your terminal server
 
-# Expose port 5000 for incoming connections
+# Expose default MCP server port
 EXPOSE 5000
-# Modify this port number if your server is configured to listen on a different port
 
-# Define the command to run your terminal server
+# Start terminal server
 CMD ["python", "terminal_server.py"]
-# This command launches your terminal server when the container starts

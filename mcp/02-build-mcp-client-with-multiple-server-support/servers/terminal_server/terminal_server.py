@@ -1,3 +1,19 @@
+"""
+Terminal MCP Server Implementation
+
+A Model Context Protocol server that provides secure terminal command execution
+within a containerized environment. This server enables LLMs to perform file
+operations, system commands, and other CLI-based tasks safely.
+
+Security Features:
+  - Workspace isolation: All commands execute within /workspace directory
+  - Timeout protection: Commands limited to 30 seconds execution time
+  - Error handling: Graceful handling of command failures
+
+Usage:
+    python terminal_server.py
+"""
+
 import os
 import subprocess
 from mcp.server.fastmcp import FastMCP
@@ -8,6 +24,7 @@ server = FastMCP("terminal")
 # Define the base working directory for command execution
 WORKSPACE_PATH = "/workspace"
 
+
 @server.tool()
 async def execute_shell_command(cmd: str) -> str:
     """
@@ -17,11 +34,11 @@ async def execute_shell_command(cmd: str) -> str:
     and other CLI-based tasks. When a terminal operation is needed,
     this function will be utilized to carry out the requested action.
 
-    Parameters:
+    Args:
         cmd: Shell command string to be executed
     
     Returns:
-        Command execution output (stdout/stderr) or error details
+        str: Command execution output (stdout/stderr) or error details
     """
     try:
         # Execute command with workspace as working directory
@@ -31,7 +48,7 @@ async def execute_shell_command(cmd: str) -> str:
             cwd=WORKSPACE_PATH, 
             capture_output=True, 
             text=True,
-            timeout=30  # Add timeout for safety
+            timeout=30
         )
         
         # Return output, prioritizing stdout over stderr
@@ -43,9 +60,11 @@ async def execute_shell_command(cmd: str) -> str:
     except Exception as error:
         return f"Execution error: {str(error)}"
 
+
 def main():
-    """Entry point for the MCP server application"""
+    """Entry point for the MCP server application."""
     server.run(transport='stdio')
+
 
 if __name__ == "__main__":
     main()

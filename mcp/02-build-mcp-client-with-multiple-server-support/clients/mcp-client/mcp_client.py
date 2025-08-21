@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 """
-langchain_mcp_client_wconfig.py
+Multi-Server MCP Client Implementation
 
-A comprehensive LangChain MCP client implementation that enables multi-server orchestration.
+A comprehensive LangChain-based Model Context Protocol client that enables
+simultaneous orchestration of multiple MCP servers.
 
 This client provides the following capabilities:
   - Dynamic configuration loading from JSON files via environment variables
@@ -11,41 +12,37 @@ This client provides the following capabilities:
   - Integration with Google Gemini API through LangChain for intelligent agent creation
   - Interactive chat interface with full tool access across all servers
 
-Key Configuration Details:
+Configuration Details:
   - Retry Logic: Implements max_retries=2 for handling transient API failures
-  - Temperature Control: Set to 0 for deterministic responses (increase for creativity)
+  - Temperature Control: Set to 0 for deterministic responses
   - Environment Configuration: Uses CONFIG variable to specify server definitions
   - Graceful Error Handling: Continues operation even if individual servers fail to connect
+
+Usage:
+    Set GOOGLE_API_KEY environment variable and run:
+    python mcp_client.py
 """
 
-import asyncio                        # Asynchronous operation support
-import os                             # Environment variable and file system access
-import sys                            # System-specific parameters and error handling
-import json                           # JSON data serialization and parsing
-from contextlib import AsyncExitStack # Async context manager for resource cleanup
+import asyncio
+import os
+import sys
+import json
+from contextlib import AsyncExitStack
 
-# ---------------------------
 # MCP Client Core Components
-# ---------------------------
-from mcp import ClientSession, StdioServerParameters  # MCP session management and server configuration
-from mcp.client.stdio import stdio_client             # Standard I/O communication with MCP servers
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
 
-# ---------------------------
 # Agent Framework and LLM Integration
-# ---------------------------
-from langchain_mcp_adapters.tools import load_mcp_tools  # MCP to LangChain tool conversion
-from langgraph.prebuilt import create_react_agent        # React agent creation with LangGraph
-from langchain_google_genai import ChatGoogleGenerativeAI  # Google Gemini API integration
+from langchain_mcp_adapters.tools import load_mcp_tools
+from langgraph.prebuilt import create_react_agent
+from langchain_google_genai import ChatGoogleGenerativeAI
 
-# ---------------------------
 # Environment Configuration
-# ---------------------------
 from dotenv import load_dotenv
-load_dotenv()  # Load environment variables from .env file
+load_dotenv()
 
-# ---------------------------
-# Custom JSON Encoder for Response Formatting
-# ---------------------------
+
 class CustomEncoder(json.JSONEncoder):
     """
     Enhanced JSON encoder for handling LangChain-specific objects.
@@ -63,7 +60,7 @@ class CustomEncoder(json.JSONEncoder):
 # ---------------------------
 def read_config_json():
     """
-    Loads MCP server configuration with intelligent fallback handling.
+    Load MCP server configuration with intelligent fallback handling.
 
     Configuration Priority:
       1. MULTI_SERVER_CONFIG environment variable path
@@ -80,31 +77,27 @@ def read_config_json():
     if not config_path:  
         script_dir = os.path.dirname(os.path.abspath(__file__))
         config_path = os.path.join(script_dir, "config.json")
-        print(f"⚠️  MULTI_SERVER_CONFIG not set. Using default: {config_path}")
+        print(f"Warning: MULTI_SERVER_CONFIG not set. Using default: {config_path}")
 
     try:
         with open(config_path, "r") as f:
             return json.load(f)
     except Exception as e:
-        print(f"❌ Configuration load failed at '{config_path}': {e}")
+        print(f"Error: Configuration load failed at '{config_path}': {e}")
         sys.exit(1)
 
-# ---------------------------
+
 # LLM Configuration
-# ---------------------------
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.0-flash",                     # Latest Gemini model for optimal performance
-    temperature=0,                                # Deterministic output for consistent agent behavior
+    temperature=0,                                # Deterministic output for consistent behavior
     max_retries=2,                                # Resilience against transient API failures
     google_api_key=os.getenv("GOOGLE_API_KEY")    # Secure API key retrieval from environment
 )
 
-# ---------------------------
-# Main Orchestration Function
-# ---------------------------
 async def run_agent():
     """
-    Orchestrates multi-server MCP connections and creates a unified agent interface.
+    Orchestrate multi-server MCP connections and create a unified agent interface.
     
     This function handles the complete workflow:
     1. Configuration loading and validation
@@ -116,7 +109,7 @@ async def run_agent():
     config = read_config_json()
     mcp_servers = config.get("mcpServers", {})
     if not mcp_servers:
-        print("❌ No MCP servers found in configuration.")
+        print("Error: No MCP servers found in configuration.")
         return
 
     tools = []
@@ -124,7 +117,7 @@ async def run_agent():
     async with AsyncExitStack() as stack:
         # Parallel server connection and tool loading
         for server_name, server_info in mcp_servers.items():
-            print(f"\n🔗 Establishing connection to: {server_name}...")
+            print(f"\nEstablishing connection to: {server_name}...")
 
             server_params = StdioServerParameters(
                 command=server_info["command"],
@@ -143,23 +136,23 @@ async def run_agent():
                 server_tools = await load_mcp_tools(session)
 
                 for tool in server_tools:
-                    print(f"\n🔧 Registered tool: {tool.name}")
+                    print(f"Registered tool: {tool.name}")
                     tools.append(tool)
 
-                print(f"\n✅ Successfully loaded {len(server_tools)} tools from {server_name}")
+                print(f"Successfully loaded {len(server_tools)} tools from {server_name}")
             except Exception as e:
-                print(f"❌ Connection failed for {server_name}: {e}")
+                print(f"Connection failed for {server_name}: {e}")
                 # Continue with other servers despite individual failures
 
         if not tools:
-            print("❌ No tools available from any server. Terminating.")
+            print("Error: No tools available from any server. Terminating.")
             return
 
         # Create unified agent with all available tools
         agent = create_react_agent(llm, tools)
 
         # Interactive chat interface
-        print("\n🚀 Multi-Server MCP Client Ready! Type 'quit' to exit.")
+        print("\nMulti-Server MCP Client Ready! Type 'quit' to exit.")
         while True:
             query = input("\nQuery: ").strip()
             if query.lower() == "quit":
@@ -176,8 +169,7 @@ async def run_agent():
             except Exception:
                 print(str(response))
 
-# ---------------------------
+
 # Application Entry Point
-# ---------------------------
 if __name__ == "__main__":
     asyncio.run(run_agent())

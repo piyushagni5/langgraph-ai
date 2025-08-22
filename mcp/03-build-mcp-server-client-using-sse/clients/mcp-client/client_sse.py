@@ -15,7 +15,7 @@ What makes this architecture powerful:
 
 Complete Request Flow:
 ┌─────────────────┐    (1) User Query     ┌─────────────────┐
-│                 │─────────────────────→│                 │
+│                 │─────────────────────→ │                 │
 │  User Terminal  │                       │  MCP Client     │
 │                 │                       │                 │
 └─────────────────┘                       └─────────────────┘
@@ -28,8 +28,8 @@ Complete Request Flow:
 │  (via SSE)      │      (if needed)      │                 │
 │                 │─────(5) Response─────→│                 │
 └─────────────────┘                       └─────────────────┘
-        │                                          │
-        │                                          │
+        │                                           │
+        │                                           │
         └──────────(6) Final Answer─────────────────┘
 
 Key Components:

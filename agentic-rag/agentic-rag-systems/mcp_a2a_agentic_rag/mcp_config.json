@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "web_search": {
+      "command": "python",
+      "args": ["mcp/servers/web_search_server/web_search_server.py"]
+    },
+    "terminal": {
+      "command": "python", 
+      "args": ["mcp/servers/terminal_server/terminal_server.py"]
+    }
+  }
+}

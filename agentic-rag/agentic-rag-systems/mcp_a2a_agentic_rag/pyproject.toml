@@ -1,0 +1,38 @@
+# pyproject.toml
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mcp-a2a-agentic-rag"
+version = "1.0.0"
+description = "A complete project combining MCP, A2A, and Agentic RAG with centralized model management"
+authors = [{name = "MCPxA2AxRAG Team"}]
+dependencies = [
+    "fastapi>=0.104.1",
+    "uvicorn>=0.24.0",
+    "streamlit>=1.28.0",
+    "httpx>=0.25.0",
+    "asyncclick>=8.1.7.2",
+    "pydantic>=2.5.0",
+    "google-genai",
+    "google-adk",
+    "a2a-python",
+    "mcp",
+    "rich>=13.7.0",
+    "python-dotenv>=1.0.0",
+    "faiss-cpu>=1.7.4",
+    "tiktoken>=0.5.1",
+    "PyPDF2>=3.0.1",
+    "numpy>=1.24.3",
+    # New dependencies for centralized model configuration
+    "langchain-google-genai>=1.0.0",
+    "langchain-huggingface>=0.0.3",
+    "langchain-core>=0.1.0",
+    "sentence-transformers>=2.2.2",
+    "transformers>=4.21.0",
+    "torch>=1.12.0",
+]
+
+[project.scripts]
+mcp-a2a-rag = "main:start_system"

@@ -1,0 +1,1 @@
+Agentic RAG Agent - Advanced document intelligence system that ingests PDFs, performs semantic search with multi-candidate ranking, and generates answers using Gemini 2.0 Flash Exp. Combines document-based retrieval with web search integration via MCP servers for comprehensive question answering and document analysis.

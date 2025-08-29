@@ -6,7 +6,6 @@ import asyncio
 import signal
 import sys
 import logging
-import warnings
 import os
 from dotenv import load_dotenv
 from agents.host_agent.main import serve_host_agent

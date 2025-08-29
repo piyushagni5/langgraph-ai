@@ -1,18 +1,12 @@
 import asyncio
 import logging
-# ADDED: Import signal and sys for graceful shutdown handling
-import signal
-import sys
-from contextlib import asynccontextmanager
 from utilities.mcp.mcp_discovery import MCPDiscovery
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
 from google.adk.tools.mcp_tool import StdioConnectionParams
-from google.adk.tools.mcp_tool.mcp_session_manager import StreamableHTTPServerParams
-
 from mcp import StdioServerParameters
 from rich import print
 
-# ADDED: Configure logging for MCP cleanup issues to reduce noise during shutdown
+# Configure logging for MCP cleanup issues to reduce noise during shutdown
 logging.getLogger("mcp").setLevel(logging.ERROR)
 logger = logging.getLogger(__name__)
 
@@ -39,19 +33,16 @@ class MCPConnector:
 
         for name, server in self.discovery.list_servers().items():
             try:
-                if server.get("command") == "streamable_http":
-                    conn = StreamableHTTPServerParams(url=server["args"][0])
-                else:
-                    conn = StdioConnectionParams(
+                conn = StdioConnectionParams(
                     server_params=StdioServerParameters(
                         command=server["command"],
                         args=server["args"]
                     ),
                     timeout=5
-                    )
+                )
                 
                 try:
-                    # ADDED: Wrap toolset creation with timeout and error handling
+                    # Wrap toolset creation with timeout and error handling
                     # This prevents hanging on unresponsive MCP servers
                     toolset = await asyncio.wait_for(
                         MCPToolset(connection_params=conn).get_tools(),
@@ -65,7 +56,7 @@ class MCPConnector:
                         print(f"[bold green]Loaded tools from server [cyan]'{name}'[/cyan]:[/bold green] {', '.join(tool_names)}")
                         tools.append(mcp_toolset)
                         
-                # ADDED: Specific error handling for different types of connection failures
+                # Specific error handling for different types of connection failures
                 except asyncio.TimeoutError:
                     print(f"[bold yellow]Timeout loading tools from server '{name}' (skipping)[/bold yellow]")
                 except asyncio.CancelledError:

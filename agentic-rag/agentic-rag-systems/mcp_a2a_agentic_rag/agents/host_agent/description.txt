@@ -1,12 +1,1 @@
-Host Agent - MCP A2A Agentic RAG System
-
-The Host Agent serves as the primary coordinator and entry point for the MCP A2A (Model Context Protocol Agent-to-Agent) Agentic RAG system. It acts as an intelligent router and orchestrator that analyzes user queries and determines the optimal processing strategy.
-
-Key Functions:
-- Query analysis and intent recognition
-- Agent coordination and delegation
-- Conversation management and context preservation
-- Direct response generation for appropriate queries
-- MCP tool integration and management
-
-The Host Agent ensures efficient query processing by intelligently routing requests to specialized agents (like the Agentic RAG Agent) when complex knowledge retrieval is needed, while handling straightforward queries directly to minimize response time and system overhead.
+Host Agent - Primary coordinator and entry point for the MCP A2A Agentic RAG system that intelligently routes user queries to specialized agents or handles them directly. Acts as an intelligent orchestrator for query analysis, agent delegation, and conversation management within the multi-agent architecture.

@@ -3,9 +3,11 @@ import uvicorn
 from a2a.types import AgentSkill, AgentCard, AgentCapabilities
 import asyncclick as click
 from a2a.server.request_handlers import DefaultRequestHandler
-from agents.agentic_rag_agent.agent_executor import AgenticRAGExecutor
 from a2a.server.tasks import InMemoryTaskStore
 from a2a.server.apps import A2AStarletteApplication
+
+from agents.agentic_rag_agent.agent_executor import AgenticRAGExecutor
+
 
 async def serve_agentic_rag_agent(host: str, port: int):
     '''Run the agentic RAG agent server.'''

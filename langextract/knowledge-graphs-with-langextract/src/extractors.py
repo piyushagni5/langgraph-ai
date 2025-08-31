@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 def document_extractor_tool(text: str, query: str) -> Dict[str, Any]:
     """
     Extract entities and relationships from text using LangExtract
@@ -78,13 +77,20 @@ def extract_relationships(documents: List[str], entities: List[Dict]) -> List[Di
     for doc in documents:
         # Create a context-aware prompt for relationship extraction
         entity_names = [e["text"] for e in entities]
-        relationship_query = f"Find relationships between these entities: {', '.join(entity_names[:10])}"
+        relationship_query = f"Extract relationships and connections between entities. Focus on: founder relationships, CEO positions, company locations, employment, partnerships"
         
         result = document_extractor_tool(doc, relationship_query)
         
         # Process extractions to identify relationships
         for extraction in result.get("extractions", []):
-            if extraction["class"] in ["relationship", "connection"]:
+            # More flexible relationship detection
+            extraction_class = extraction["class"].lower()
+            if any(keyword in extraction_class for keyword in ["relationship", "connection", "founded", "ceo", "employment", "partnership", "located", "headquartered"]):
+                all_relationships.append(extraction)
+            # Also check if extraction text suggests a relationship
+            elif any(keyword in extraction["text"].lower() for keyword in ["founded by", "ceo of", "located in", "headquartered", "worked at", "employed by"]):
+                # Convert to relationship format
+                extraction["class"] = "relationship"
                 all_relationships.append(extraction)
     
     return all_relationships

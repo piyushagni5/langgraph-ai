@@ -6,8 +6,8 @@ from src.utils import get_node_color
 def display_agraph(nodes: List[Node], edges: List[Edge]):
     """Display interactive graph using streamlit-agraph"""
     config = Config(
-        width=800,
-        height=600,
+        width=1200,    # Increased width for better full-screen usage
+        height=700,    # Increased height for better visibility
         directed=True,
         physics=True,
         hierarchical=False,

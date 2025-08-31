@@ -13,8 +13,23 @@ def main():
     st.set_page_config(
         page_title="LangExtract Knowledge Graph Builder",
         page_icon="🕸️",
-        layout="wide"
+        layout="wide"  # Use wide layout for full screen
     )
+    
+    # Custom CSS for full-width graphs
+    st.markdown("""
+    <style>
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 2px;
+    }
+    .element-container {
+        width: 100% !important;
+    }
+    iframe {
+        width: 100% !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
     st.title("🕸️ LangExtract Knowledge Graph Builder")
     st.markdown("Transform unstructured text into interactive knowledge graphs using Google's LangExtract")
@@ -51,9 +66,11 @@ def main():
             nodes, edges = results["graph_data"]["nodes"], results["graph_data"]["edges"]
             
             if nodes:
-                selected_node = display_agraph(nodes, edges)
-                if selected_node:
-                    st.info(f"Selected: {selected_node}")
+                # Use full width container for the graph
+                with st.container():
+                    selected_node = display_agraph(nodes, edges)
+                    if selected_node:
+                        st.info(f"Selected: {selected_node}")
             else:
                 st.warning("No entities found to visualize")
         

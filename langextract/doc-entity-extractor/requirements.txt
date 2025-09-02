@@ -1,0 +1,5 @@
+langextract>=1.0.0
+streamlit>=1.28.0
+streamlit-agraph>=0.0.39
+python-dotenv>=1.0.0
+textwrap3>=0.9.2

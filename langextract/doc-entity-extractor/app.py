@@ -3,7 +3,7 @@ import streamlit as st
 import os
 from typing import Dict, Any
 from src.utils import load_gemini_key
-from src.document_processor import extract_entities_from_documents
+from src.entity_extractor import extract_entities_from_documents
 from src.display_manager import create_highlighted_html, render_entity_highlights, show_extraction_summary
 from data.sample_documents import SAMPLE_DOCUMENTS
 

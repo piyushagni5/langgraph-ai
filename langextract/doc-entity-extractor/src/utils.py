@@ -31,17 +31,3 @@ def load_gemini_key() -> Tuple[str, bool]:
             st.sidebar.error("❌ No API key provided")
     
     return key, key_provided
-
-def get_node_color(entity_class: str) -> str:
-    """Assign colors based on entity class"""
-    color_map = {
-        "company": "#FF6B6B",
-        "person": "#4ECDC4", 
-        "location": "#45B7D1",
-        "financial_metric": "#96CEB4",
-        "date": "#FFEAA7",
-        "character": "#DDA0DD",
-        "emotion": "#FFB347",
-        "relationship": "#98D8C8"
-    }
-    return color_map.get(entity_class, "#BDC3C7")

@@ -1,96 +1,78 @@
-import langextract as lx
+# src/document_processor.py (Renamed from processors.py)
 import streamlit as st
-import textwrap
-from typing import Dict, Any, List
-from templates.few_shot_examples import get_dynamic_examples
+import langextract as lx
 import os
-from dotenv import load_dotenv
+from typing import List, Dict, Any
+from templates.few_shot_examples import get_dynamic_examples
+import textwrap
 
-load_dotenv()
-
-def identify_text_entities(text: str, query: str) -> Dict[str, Any]:
-    """
-    Extract entities and relationships from text using LangExtract
-    with dynamic few-shot examples based on query keywords.
-    """
+def extract_entities_from_documents(documents: List[str], query: str = "") -> Dict[str, Any]:
+    """Simplified processing pipeline using LangExtract's native features"""
     
-    # Build clean prompt
-    prompt = textwrap.dedent(f"""
-        You are an expert information extractor. Your task is to pull out 
-        relevant entities and relationships from the given text.
-        
-        Focus on: {query}
-        
-        Extract entities with their types and meaningful attributes.
-        Identify relationships between entities with clear connection types.
-        Use exact text for extractions. Do not paraphrase or overlap entities.
-    """)
-    
-    # Get dynamic examples based on query
-    examples = get_dynamic_examples(query)
-    
-    # Extract using LangExtract
-    try:
-        result = lx.extract(
-            text_or_documents=text,
-            prompt_description=prompt,
-            examples=examples,
-            model_id="gemini-2.5-flash",
-            api_key=os.getenv("GOOGLE_API_KEY")
-        )
-        
-        # Log results for debugging
-        st.write(f"Debug: Extracted {len(result.extractions)} entities")
-        
-        # Normalize output
-        normalized_extractions = []
-        for extraction in result.extractions:
-            normalized_extractions.append({
-                "text": extraction.extraction_text,
-                "class": extraction.extraction_class,
-                "attributes": extraction.attributes or {}
-            })
-        
-        return {
-            "extractions": normalized_extractions,
-            "source_text": text
-        }
-        
-    except Exception as e:
-        st.error(f"Extraction failed: {str(e)}")
-        return {"extractions": [], "source_text": text}
-
-def parse_document_entities(documents: List[str], query: str) -> List[Dict]:
-    """Extract entities from multiple documents"""
+    all_results = []
     all_entities = []
     
-    for doc in documents:
-        result = identify_text_entities(doc, f"{query} - extract entities")
-        all_entities.extend(result.get("extractions", []))
+    st.info("🔍 Processing documents with LangExtract...")
+    progress_bar = st.progress(0) 
     
-    return all_entities
+    for i, document in enumerate(documents):
+        # Use LangExtract directly for better integration
+        try:
+            
+            # Create prompt description
+            prompt_description = textwrap.dedent(f"""
+            You are an expert information extractor. Your task is to pull out 
+            relevant entities and relationships from the given text.
+            
+            Focus on: {query}
+            
+            Extract entities with their types and meaningful attributes.
+            Identify relationships between entities with clear connection types.
+            Use exact text for extractions. Do not paraphrase or overlap entities.
+            """)
 
-def find_entity_relationships(documents: List[str], entities: List[Dict]) -> List[Dict]:
-    """Extract relationships between entities"""
-    all_relationships = []
+            # Get dynamic examples based on query
+            examples = get_dynamic_examples(query or "business information")
+            
+            result = lx.extract(
+                text_or_documents=document,
+                prompt_description=prompt_description.strip(),
+                examples=examples,
+                model_id="gemini-2.5-flash",
+                api_key=os.getenv("GOOGLE_API_KEY"),
+                # max_workers=5,  # Reasonable number of workers
+                # extraction_passes=2  # Two passes for better recall
+            )
+            
+            # Store the complete LangExtract result object
+            all_results.append(result)
+            
+            # Extract entities for summary
+            entities = [
+                {
+                    "text": extraction.extraction_text,
+                    "class": extraction.extraction_class,
+                    "attributes": extraction.attributes or {},
+                    "document_index": i  # Track which document this came from
+                }
+                for extraction in result.extractions
+            ]
+            all_entities.extend(entities)
+            
+            # Update progress
+            progress_bar.progress((i + 1) / len(documents))
+            
+        except Exception as e:
+            st.error(f"Error processing document {i+1}: {str(e)}")
+            st.error("Please check your API key and try again.")
+            continue
     
-    for doc in documents:
-        # Create a context-aware prompt for relationship extraction
-        entity_names = [e["text"] for e in entities]
-        relationship_query = f"Extract relationships and connections between entities. Focus on: founder relationships, CEO positions, company locations, employment, partnerships"
-        
-        result = identify_text_entities(doc, relationship_query)
-        
-        # Process extractions to identify relationships
-        for extraction in result.get("extractions", []):
-            # More flexible relationship detection
-            extraction_class = extraction["class"].lower()
-            if any(keyword in extraction_class for keyword in ["relationship", "connection", "founded", "ceo", "employment", "partnership", "located", "headquartered"]):
-                all_relationships.append(extraction)
-            # Also check if extraction text suggests a relationship
-            elif any(keyword in extraction["text"].lower() for keyword in ["founded by", "ceo of", "located in", "headquartered", "worked at", "employed by"]):
-                # Convert to relationship format
-                extraction["class"] = "relationship"
-                all_relationships.append(extraction)
+    progress_bar.progress(1.0)
+    st.success(f"✅ Processed {len(documents)} documents, found {len(all_entities)} entities")
     
-    return all_relationships
+    return {
+        "langextract_results": all_results,
+        "entities": all_entities,
+        "document_count": len(documents),
+        "original_documents": documents
+    }

@@ -1,4 +1,4 @@
-# src/display_manager.py (Renamed from visualizer.py)
+# src/display_manager.py
 import streamlit as st
 import streamlit.components.v1 as components
 import langextract as lx

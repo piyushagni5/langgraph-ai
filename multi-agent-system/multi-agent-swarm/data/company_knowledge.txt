@@ -1,0 +1,13 @@
+Our company, Acme Music Inc., specializes in digital music distribution and artist management. 
+We partner with artists to publish their songs on streaming platforms such as Spotify, Apple Music, and Amazon Music. 
+
+We also manage a large collection of classic rock, jazz, and pop albums. 
+The Chinook database represents a subset of our catalog, including albums, artists, tracks, and customer purchase history. 
+
+Customer service policies:
+- Refunds are available within 7 days of purchase. 
+- VIP members get a 20% discount on all albums. 
+- Technical support is available via email and phone 24/7. 
+
+Our offices are located in Seattle, WA, with remote teams working globally. 
+We pride ourselves on fast distribution, fair artist royalties, and great customer support.

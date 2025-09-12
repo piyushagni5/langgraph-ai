@@ -1,0 +1,51 @@
+# Core LangGraph and Swarm
+langgraph>=0.2.0
+langgraph-swarm<=0.0.14
+langgraph-checkpoint-sqlite>=1.0.0
+
+# LangChain Core Components
+langchain>=0.1.0
+langchain-core>=0.1.0
+langchain-community>=0.0.20
+langchain-openai>=0.0.8
+langchain-chroma>=0.1.0
+
+# OpenAI
+openai>=1.12.0
+
+# Document Processing
+pypdf>=4.0.0
+python-docx>=1.1.0
+docx2txt>=0.8
+
+# Text Processing and Embeddings
+sentence-transformers>=2.2.2
+transformers>=4.36.0
+torch>=2.0.0
+
+# Vector Database
+chromadb>=0.4.0
+
+# Database
+# sqlite3
+sqlalchemy>=2.0.0
+
+# Text Splitting and Processing
+tiktoken>=0.5.0
+
+# Utilities
+typing-extensions>=4.5.0
+pydantic>=2.0.0
+numpy>=1.24.0
+
+# Optional: For better performance
+faiss-cpu>=1.7.4
+
+# Development and Debugging (optional)
+langchain-experimental>=0.0.50
+langsmith>=0.0.80
+
+# System utilities
+python-dotenv>=1.0.0
+
+pyppeteer

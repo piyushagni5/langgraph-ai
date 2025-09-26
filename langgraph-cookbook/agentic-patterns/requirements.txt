@@ -1,0 +1,6 @@
+langgraph==0.3.31 
+langchain==0.3.23
+langchain_community==0.3.21 
+pygraphviz==1.14
+langchain_aws
+tavily-python

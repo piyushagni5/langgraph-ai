@@ -8,6 +8,7 @@ langchain-core>=0.1.0
 langchain_aws
 langchain_community
 langchain_google_genai
+langchain_fireworks
 
 # Memory management
 langmem<=0.0.29

@@ -16,28 +16,32 @@ This repository serves as a implementation guide for building sophisticated AI a
 
 ```
 langgraph-ai/
-├── agentic-rag/
-│   ├── agentic-rag-systems/
-│   │   └── building-adaptive-rag/
-│   └── agentic-workflow-pattern/
-│       ├── 1-prompting_chaining.ipynb
-│       ├── 2-routing.ipynb
-│       ├── 3-parallelization.ipynb
-│       ├── 4-orchestrator-worker.ipynb
-│       └── 5-Evaluator-optimizer.ipynb
+├── rag/
+│   ├── rag-from-scratch/
+│   │   └── 1_rag_overview.ipynb
+│   ├── rag-agents/
+│   │   ├── Building an Advanced RAG Agent.ipynb
+│   │   └── rag-as-tool-in-langgraph-agents.ipynb
+│   ├── agentic-rag/
+│   │   ├── agentic-rag-systems/
+│   │   │   └── building-adaptive-rag/
+│   │   └── agentic-workflow-pattern/
+│   │       ├── 1-prompting_chaining.ipynb
+│   │       ├── 2-routing.ipynb
+│   │       ├── 3-parallelization.ipynb
+│   │       ├── 4-orchestrator-worker.ipynb
+│   │       └── 5-Evaluator-optimizer.ipynb
 ├── mcp/
 │   ├── 01-build-your-own-server-client/
 │   ├── 02-build-mcp-client-with-multiple-server-support/
-│   └── 03-build-mcp-server-client-using-sse/
+│   ├── 03-build-mcp-server-client-using-sse/
+│   └── 04-build-streammable-http-mcp-client/
 ├── langgraph-cookbook/
 │   ├── human-in-the-loop/
 │   │   ├── 01-human-in-the-loop.ipynb
 │   │   ├── 02-human-in-the-loop.ipynb
 │   │   └── 03-human-in-the-loop.ipynb
 │   └── tool-calling -vs-react.ipynb
-├── rag/
-│   ├── Building an Advanced RAG Agent.ipynb
-│   └── rag-as-tool-in-langgraph-agents.ipynb
 ├── .gitignore
 ├── .gitmodules
 ├── README.md
